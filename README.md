@@ -30,7 +30,7 @@ example:
 
     }
 
-###Testing hierarchy
+### Testing hierarchy
 
 When running the tests, a singe test will stop as soon as an error occurs.
 
@@ -67,7 +67,20 @@ Will show this:
 
 The reason for this implementation is to encourage the use of many smaller individual tests instead of one big test with way too much code.
 
-###Function requirements:
+Note: The same rule applies to the use of require() 
+	for example:
+	
+	int f(int a){
+    		require(a != 0, "Require failed fTest()");
+		require(a > 1, "Require failed fTest()");
+	
+		return 1/a;
+	};
+	
+In tests, this will only show the first error if you use f(0)
+
+
+### Function requirements:
 
 Let's say you want to check at the beginning of your function if the parameters are valid.
 You can use the require() function for that.
@@ -88,6 +101,7 @@ This can then be checked for during tests like this:
 
 Be sure to pay attention to your require() statements.
 If you call the above function f(0) outside of your tests, your your program will most likely fail due to an ignored exception. You can try and catch these just like normal exceptions, so if you want to prevent crashes, try that.
+
 __________________________
 
 note: This is mainly usefull for small projects that need fast and easy (maybe a bit dirty) testing.
