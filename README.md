@@ -61,8 +61,9 @@ Will show this:
      - Started testing: TestExample2.
         [[ASSERTION FAILED!!: false2]]
 
+The reason for this implementation is to encourage using many smaller individual tests instead of one big Test with way too much code.
 
-
+__________________________
 
 note: This is mainly usefull for small projects that need fast and easy (maybe a bit dirty) testing.
     If your project ends up being reasonably big, consider using Gtest or some other testing library.
