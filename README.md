@@ -5,104 +5,72 @@ _______
 
 example:
 
-    /// Setting up tests
-    TestContainer testContainer({
+    int main() {
 
-        new Test("TestName1", []{	// will succeed without errors
-            assert(true, "true1");
-            assert(true, "true2");
+        /// Setting up tests
+        TestContainer testContainer({
 
-        }),
+        TEST(TestName1, testContainer) {	// will succeed without errors
+            ASSERT(true, "true1");
+            ASSERT(true, "true2");
 
-        new Test("TestName2", []{	// will report first assertion
-            assert(false, "false");
-            assert(true, "true");
+        };  // ';' is necessary
 
-        }),
-	
-	///....
+        TEST(TestName2, testContainer) {	// will report first assertion
+            ASSERT(false, "false");
+            ASSERT(true, "true");
 
-    });
+        };
 
-    int main()
-    {
+        ///....
+
+
         testContainer.runAllTests();
 
     }
 
-### Testing hierarchy
+### Testing
 
-When running the tests, a single test will stop as soon as an error occurs.
+Currently implemented are:
+    - ASSERT(bool, char*);          // Check if a condition is true, test fails if not.
+    - REQUIRE(bool, char*);         // Check if a condition is true, sends exception if not. Can be used to force quit function calls.
+    - EXPECTCRASH(function, char*); // Check if a function "crashes" with the given input. Additional info follows.
+    - EXPECTSAFE(function char*);   // Check if a function doesn't "crash" with the given input. Test fails if it does
 
-for example,
-When making a test like this:
-        
-    new Test("TestExample", []{
-        assert(false, "false1");
-        assert(false, "false2");
-    })
-    
-It will only show an error for the first assertion, thus the output will be:
-
-    - Started testing: TestExample.
-	[[ASSERTION FAILED!!: false1]]
-    
-However, This does not occur across tests:
-
-    new Test("TestExample", []{
-        assert(false, "false1");
-    }),
-    
-    new Test("TestExample2", []{
-        assert(false, "false2");
-    })
-
-Will show this:
-
-     - Started testing: TestExample.
-        [[ASSERTION FAILED!!: false1]]
-
-     - Started testing: TestExample2.
-        [[ASSERTION FAILED!!: false2]]
-
-The reason for this implementation is to encourage the use of many smaller individual tests instead of one big test with way too much code.
-
-Note: The same rule applies to the use of require() 
-	for example:
-	
-	int f(int a){
-		require(a != 0, "Require failed fTest()");
-		require(a > 1, "Require failed fTest()");
-	
-		return 1/a;
-	};
-	
-In tests, this will only show the first error if you use f(0)
-
-
-### Function requirements:
+### Using REQUIRE:
 
 Let's say you want to check at the beginning of your function if the parameters are valid.
-You can use the require() function for that.
+You can use the REQUIRE "function" for that.
 
-example:
+Example:
 
 	int f(int a){
-    		require(a != 0, "Require failed fTest()");
+    	REQUIRE(a != 0, "Require failed fTest()");
 		return 1/a;
 	};
 
 This can then be checked for during tests like this:
 
-	new Test("Test", []{
-		assertCrash(fTest(0), "CrashTest1");
-		assertNoCrash(fTest(5), "CrashTest2");
-	}),
+	EXPECTCRASH(fTest(0), "CrashTest1");
+	EXPECTSAFE(fTest(5), "CrashTest2");
 
-Be sure to pay attention to your require() statements.
-If you call the above function f(0) outside of your tests, your your program will most likely fail due to an ignored exception. You can try and catch these just like normal exceptions, so if you want to prevent crashes, try that.
+Be sure to pay attention to your REQUIRE() statements.
+If you call the previouse function example outside of your tests, your program will most likely fail due to an ignored exception.
+You can try and catch it just like normal exceptions, so if you want to prevent crashes,
+try that,
+or just always comply with your REQUIRE statements.
+
+Note: Due to the fact that REQUIRE throws an exception, multipple failing REQUIRE statements will only show the top one failing.
+
+Example:
+
+    REQUIRE(false, "checked");
+    REQUIRE(false, "not checkes");
+
+Only the first one will be checked. It then throws an excpetion causing the program to exit function calls until it finds a try - catch.
+(That's about as far as my knowledge of exceptions goes.)
 
 __________________________
 
-note: This is mainly usefull for small projects that need fast and easy (maybe a bit dirty) testing.
-    If your project ends up being reasonably big, consider using Gtest or some other testing library.
+Note: This is mainly usefull for small projects that need fast and easy (maybe a bit dirty) testing.
+    If your project ends up being reasonably big, consider using Gtest or some other, maybe a bit more stable, testing library.

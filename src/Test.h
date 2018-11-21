@@ -11,66 +11,100 @@
 
 using namespace std;
 
+namespace easyTest {
+
 /// Main Test Class
-class Test {
+    class Test {
 
-    string testGroup;
-    function<void ()> funct;
+        string testGroup;
 
-public:
+    public:
 
-    Test(const string &testGroup, const function<void()> &funct);
-    void run();
+        function<void(bool &)> funct;
 
-};
+        explicit Test(const string &testGroup);
+
+        bool run();
+
+    };
 
 /// Test Container
-class TestContainer {
+    class TestContainer {
 
-    vector<Test*> tests;
+    public:
 
-public:
+        vector<Test *> tests;
 
-    explicit TestContainer(const vector<Test*> &tests);
-    virtual ~TestContainer();
+        TestContainer();
 
-    void runAllTests();
+        virtual ~TestContainer();
 
-};
+        void add(Test *t);
+
+        void runAllTests();
+
+    };
 
 /// Default Exception
-struct TestException : public std::exception
-{
-    string errorMessage;
-    explicit TestException(string &errorMessage): errorMessage(errorMessage){}
+    struct TestException : public std::exception {
+        string errorMessage;
 
-    virtual string error () const noexcept;
+        explicit TestException(string &errorMessage) : errorMessage(errorMessage) {}
 
-};
+        explicit TestException(const char *errorMessage) : errorMessage(errorMessage) {}
 
-/// Require Exception
-struct RequireException : public TestException
-{
-    explicit RequireException(string &errorMessage) : TestException(errorMessage) {}
+        const char *what() const noexcept override;
 
-    string error () const noexcept override;
+    };
 
-};
 
 /// Crash Exception
-struct CrashException : public TestException
-{
-    explicit CrashException(string &errorMessage) : TestException(errorMessage) {}
+    struct RequireException : public TestException {
+        explicit RequireException(string &errorMessage) : TestException(errorMessage) {}
 
-    string error () const noexcept override;
+        explicit RequireException(const char *errorMessage) : TestException(errorMessage) {}
 
-};
+        const char *what() const noexcept override;
 
-/// Require helper function
-void require(bool a, string errorMessage);
+    };
 
-/// Check if a function crashes, helper function
-void excpectNoCrash(function<void()> funct, string errorMessage);
+#define TEST(testName, tc)\
+    auto* test_##testName = new easyTest::Test(#testName);\
+    tc.add(test_##testName);\
+    test_##testName->funct = [](bool &fullSucces)
 
+#define EXPECTCRASH(funct, str){\
+            bool a = false;\
+            try {\
+            funct;\
+            }catch(...){ \
+            a = true;\
+            }\
+            if (!a){ \
+                cout << "\t[[NO CRASH OCCURED!!: " << str << "]]\n";\
+                fullSucces = false;\
+            };\
+        }
+
+#define EXPECTSAFE(funct, str)\
+    try {\
+        funct;\
+    }catch(exception &e){\
+        cout << "\t[[CRASH OCCURED!!: " << str << e.what() << "]]\n";\
+        fullSucces = false;\
+    }
+
+#define ASSERT(req, str)\
+    if (!req) {\
+        cout <<  "\t[[ASSERTION FAILED!!: " << str << "]]\n";\
+        fullSucces = false;\
+    }
+
+#define REQUIRE(req, str)\
+    if (!req) {\
+        throw easyTest::RequireException(str);\
+    }
+
+}
 
 #endif //POLYCODE_TEST_H

@@ -2,16 +2,48 @@
 // Created by olivi on 21-11-2018.
 //
 
+#include <cstring>
 #include "Test.h"
 
-Test::Test(const string &testGroup, const function<void()> &funct) : testGroup(testGroup), funct(funct) {}
+using namespace easyTest;
 
-void Test::run() {
-    cout << "- Started testing group: " << testGroup << "." << endl;
-    funct();
+char* stringToCharP(const string &str){
+
+    auto *cstr = new char[str.length() + 1];
+    strcpy(cstr, str.c_str());
+
+    return cstr;
+
+};
+
+bool Test::run() {
+    cout << "- Started testing: " << testGroup << ".\n";
+    bool succes = true;
+    funct(succes);
+
+    if (!succes){
+
+        throw(TestException(testGroup));
+
+    }else{
+
+        cout << "\t[[SUCCES!!: " << testGroup << "]]\n";
+
+    }
 
 }
 
+Test::Test(const string &testGroup): testGroup(testGroup) {
+
+}
+
+TestContainer::~TestContainer() {
+
+    for (auto &i: tests){
+        delete i;
+    }
+
+}
 
 void TestContainer::runAllTests() {
 
@@ -26,7 +58,7 @@ void TestContainer::runAllTests() {
 
         }catch(TestException &e){
             countTestsFailed += 1;
-            cout << "\t" << e.error() << "\n";
+            cout << "\t" << e.what() << "\n";
 
         }
 
@@ -35,51 +67,24 @@ void TestContainer::runAllTests() {
     }
 
     cout << "[" << countTests << " tests ran]\n";
-    cout << "[" << countTestsFailed << " tests failed]\n";
+    cout << "[" << countTests - countTestsFailed << " test(s) succeeded]\n";
+    cout << "[" << countTestsFailed << " test(s) failed]\n";
 
 }
 
-TestContainer::TestContainer(const vector<Test*> &tests) : tests(tests) {}
-
-TestContainer::~TestContainer() {
-
-    for (auto &i: tests){
-        delete i;
-    }
+void TestContainer::add(Test *t) {
+    tests.emplace_back(t);
 
 }
 
-void require(bool a, string errorMessage){
-    if (!a){
-        throw(RequireException(errorMessage));
+TestContainer::TestContainer() = default;
 
-    }
-
-};
-
-void excpectNoCrash(function<void()> funct, string errorMessage){
-
-    try{
-        funct();
-
-    }catch(...){
-        throw(CrashException(errorMessage));
-
-    }
-
-};
-
-string TestException::error() const noexcept {
-    string str = "[[TEST FAILED!!: " + errorMessage + "]]";
-    return str;
+const char* TestException::what() const noexcept {
+    string str = "[[FAILED!!: " + errorMessage + "]]";
+    return stringToCharP(str);
 }
 
-string RequireException::error() const noexcept {
+const char* RequireException::what() const noexcept {
     string str = "[[REQUIRE FAILED!!: " + errorMessage + "]]";
-    return str;
-}
-
-string CrashException::error() const noexcept {
-    string str = "[[CRASH OCCURED!!: " + errorMessage + "]]";
-    return str;
+    return stringToCharP(str);
 }

@@ -3,4 +3,4 @@ project(easyTests)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(baseExample Examples/basicExample.cpp src/Test.cpp src/Test.h )
+add_executable(baseExample Examples/basicExample.cpp src/Test.cpp src/Test.h)

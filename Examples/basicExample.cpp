@@ -2,39 +2,45 @@
 // Created by olivi on 21-11-2018.
 //
 
-
 #include <iostream>
 #include <iostream>
 #include "../src/Test.h"
 
 using namespace std;
 
-void testFunct (){
-
-    TestException *a = nullptr;
-    //a->what();
+/// Will always fail.
+void fTest (){
+    REQUIRE(false, "Require failed fTest()");
 
 };
 
-TestContainer testContainer({
+/// Will never fail.
+void fTest2 (){
+    REQUIRE(true, "Require failed fTest2()");
 
-    new Test("thisTest", [](){
-        require(true, "true1");
-        require(true, "true2");
-        excpectNoCrash(testFunct, "crahTest");
+};
 
-    }),
-
-    new Test("thisTest2", [](){
-        require(false, "false");
-        require(true, "true");
-
-    })
-
-});
-
+/// Setting up tests
 int main()
 {
-    testContainer.runAllTests();
+    easyTest::TestContainer tc = easyTest::TestContainer();
+
+    TEST(Test1, tc){
+        ASSERT(true, "true");
+        ASSERT(false, "false");
+        EXPECTCRASH(fTest(), "CRASHTest1");
+        EXPECTCRASH(fTest2(), "CRASHTest1");
+        EXPECTSAFE(fTest2(), "CRASHTest2");
+
+    };
+
+    TEST(Test2, tc){
+        ASSERT(true, "true1");
+        ASSERT(true, "true2");
+        EXPECTCRASH(fTest(), "CRASHTest1");
+        EXPECTSAFE(fTest2(), "CRASHTest2");
+    };
+
+    tc.runAllTests();
 
 }
