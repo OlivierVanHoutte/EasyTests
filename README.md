@@ -4,7 +4,7 @@ A very basic testing implementation.
 
 example:
 
-TestContainer testContainer({
+{TestContainer testContainer({
 
     new Test("thisTest", [](){
         require(true, "false1");
@@ -26,5 +26,5 @@ int main()
     testContainer.runAllTests();
 
 }
-
+}
 
