@@ -1,24 +1,25 @@
 # EasyTests
 A very basic testing implementation.
-
+_______
 example:
 
-    
     /// Setting up tests
     TestContainer testContainer({
 
-        new Test("Test", [](){
+        new Test("Test", []{
             assert(true, "true1");
             assert(true, "true2");
             assertNoCrash(fTest, "crashTest");
 
         }),
 
-        new Test("Test2", [](){
+        new Test("Test2", []{
             assert(false, "false");
             assert(true, "true");
 
-        })
+        }),
+	
+	///....
 
     });
 
@@ -30,10 +31,11 @@ example:
 
 Info:
 When running the tests, a singe test will stop as soon as an error occurs.
+
 for example,
 When making a test like this:
         
-    new Test("TestExample", [](){
+    new Test("TestExample", []{
         assert(false, "false1");
         assert(false, "false2");
     })
@@ -45,11 +47,11 @@ It will only show an error for the first assertion, thus the output will be:
     
 However, This does not occur across tests:
 
-    new Test("TestExample", [](){
+    new Test("TestExample", []{
         assert(false, "false1");
     }),
     
-    new Test("TestExample2", [](){
+    new Test("TestExample2", []{
         assert(false, "false2");
     })
 
@@ -61,7 +63,7 @@ Will show this:
      - Started testing: TestExample2.
         [[ASSERTION FAILED!!: false2]]
 
-The reason for this implementation is to encourage using many smaller individual tests instead of one big Test with way too much code.
+The reason for this implementation is to encourage the use of many smaller individual tests instead of one big test with way too much code.
 
 __________________________
 
