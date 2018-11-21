@@ -29,7 +29,7 @@ example:
     }
 
 Info:
-- When running the tests, a singe test will stop as soon as an error occurs.
+When running the tests, a singe test will stop as soon as an error occurs.
 for example,
 When making a test like this:
         
