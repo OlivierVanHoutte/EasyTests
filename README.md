@@ -1,7 +1,7 @@
 # EasyTests
 A very basic testing implementation.
 _______
-##basics
+## basics
 
 example:
 
@@ -71,7 +71,7 @@ Note: The same rule applies to the use of require()
 	for example:
 	
 	int f(int a){
-    		require(a != 0, "Require failed fTest()");
+		require(a != 0, "Require failed fTest()");
 		require(a > 1, "Require failed fTest()");
 	
 		return 1/a;
