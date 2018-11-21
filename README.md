@@ -32,7 +32,7 @@ example:
 
 ### Testing hierarchy
 
-When running the tests, a singe test will stop as soon as an error occurs.
+When running the tests, a single test will stop as soon as an error occurs.
 
 for example,
 When making a test like this:
