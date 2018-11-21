@@ -1,9 +1,7 @@
 # EasyTests
 A very basic testing implementation.
 
-
 example:
-
 
     TestContainer testContainer({
 
@@ -29,3 +27,5 @@ example:
     }
 
 
+note: This is mainly usefull for small projects that need fast and easy (maybe a bit dirty) testing.
+    If your project ends up being reasonably big, consider using Gtest or some other testing library.
