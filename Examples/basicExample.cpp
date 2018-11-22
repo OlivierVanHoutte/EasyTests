@@ -3,7 +3,6 @@
 //
 
 #include <iostream>
-#include <iostream>
 #include "../src/Test.h"
 
 using namespace std;
@@ -41,6 +40,7 @@ int main()
         EXPECTSAFE(fTest2(), "CRASHTest2");
     };
 
+    cout << 1;
     tc.runAllTests();
 
 }

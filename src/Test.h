@@ -57,7 +57,6 @@ namespace easyTest {
 
     };
 
-
 /// Crash Exception
     struct RequireException : public TestException {
         explicit RequireException(string &errorMessage) : TestException(errorMessage) {}
@@ -76,9 +75,9 @@ namespace easyTest {
 #define EXPECTCRASH(funct, str){\
             bool a = false;\
             try {\
-            funct;\
+                funct;\
             }catch(...){ \
-            a = true;\
+                a = true;\
             }\
             if (!a){ \
                 cout << "\t[[NO CRASH OCCURED!!: " << str << "]]\n";\
