@@ -32,10 +32,10 @@ example:
 ### Testing
 
 Currently implemented are:
-    - ASSERT(bool, char*);          // Check if a condition is true, test fails if not.
-    - REQUIRE(bool, char*);         // Check if a condition is true, sends exception if not. Can be used to force quit function calls.
-    - EXPECTCRASH(function, char*); // Check if a function "crashes" with the given input. Additional info follows.
-    - EXPECTSAFE(function char*);   // Check if a function doesn't "crash" with the given input. Test fails if it does
+- ASSERT(bool, char*);          // Check if a condition is true, test fails if not.
+- REQUIRE(bool, char*);         // Check if a condition is true, sends exception if not. Can be used to force quit function calls.
+- EXPECTCRASH(function, char*); // Check if a function "crashes" with the given input. Additional info follows.
+- EXPECTSAFE(function char*);   // Check if a function doesn't "crash" with the given input. Test fails if it does
 
 ### Using REQUIRE:
 
