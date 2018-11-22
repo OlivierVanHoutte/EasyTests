@@ -7,10 +7,9 @@
 
 using namespace easyTest;
 
-char* stringToCharP(const string &str){
+const char* stringToCharP(const string &str){
 
-    auto *cstr = new char[str.length() + 1];
-    strcpy(cstr, str.c_str());
+    const char *cstr = str.c_str();
 
     return cstr;
 
